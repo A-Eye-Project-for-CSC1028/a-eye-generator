@@ -4,22 +4,21 @@ import sys
 
 import torch
 
-from generation_parameters import GenerationParameters
-import utils
+from .generation_parameters import GenerationParameters
+from .utils import *
 
 
-def main(parameters: GenerationParameters = GenerationParameters()):
+def generate(parameters: GenerationParameters = GenerationParameters()):
     # Get config details, such as where ComfyUI is located at on the user's computer.
-    config = utils.parse_config()
+    config = parse_config()
     comfy_path = config.get("COMFY_DIRECTORY")
 
     # Add ComfyUI to sys.path...
     if comfy_path is not None and os.path.isdir(comfy_path):
         sys.path.append(comfy_path)
-        print(f"'{comfy_path}' was added to sys.path! Continuing...")
 
     # Import ComfyUI's nodes.py module:
-    nodes = utils.import_nodes_module(comfy_path)
+    nodes = import_nodes_module(comfy_path)
 
     with torch.inference_mode():
         # Load image from path:
@@ -43,13 +42,13 @@ def main(parameters: GenerationParameters = GenerationParameters()):
         # Encode positive prompt:
         positive_prompt_encode = clip_text_encode.encode(
             text=parameters.positive_prompt,
-            clip=utils.get_value_at_index(checkpoint, 1),
+            clip=get_value_at_index(checkpoint, 1),
         )
 
         # Encode negative prompt:
         negative_prompt_encode = clip_text_encode.encode(
             text=parameters.negative_prompt,
-            clip=utils.get_value_at_index(checkpoint, 1),
+            clip=get_value_at_index(checkpoint, 1),
         )
 
         # Define an empty latent image, and then size it appropriately.
@@ -72,10 +71,10 @@ def main(parameters: GenerationParameters = GenerationParameters()):
                 strength=1,
                 start_percent=0,
                 end_percent=1,
-                positive=utils.get_value_at_index(positive_prompt_encode, 0),
-                negative=utils.get_value_at_index(negative_prompt_encode, 0),
-                control_net=utils.get_value_at_index(controlnet, 0),
-                image=utils.get_value_at_index(image, 0),
+                positive=get_value_at_index(positive_prompt_encode, 0),
+                negative=get_value_at_index(negative_prompt_encode, 0),
+                control_net=get_value_at_index(controlnet, 0),
+                image=get_value_at_index(image, 0),
             )
 
             sampled_image = k_sampler.sample(
@@ -85,20 +84,16 @@ def main(parameters: GenerationParameters = GenerationParameters()):
                 sampler_name=parameters.sampler,
                 scheduler=parameters.scheduler,
                 denoise=parameters.denoise,
-                model=utils.get_value_at_index(checkpoint, 0),
-                positive=utils.get_value_at_index(controlnet_applied, 0),
-                negative=utils.get_value_at_index(controlnet_applied, 1),
-                latent_image=utils.get_value_at_index(usable_latent_image, 0),
+                model=get_value_at_index(checkpoint, 0),
+                positive=get_value_at_index(controlnet_applied, 0),
+                negative=get_value_at_index(controlnet_applied, 1),
+                latent_image=get_value_at_index(usable_latent_image, 0),
             )
 
             decoded_image = vae_decoder.decode(
-                samples=utils.get_value_at_index(sampled_image, 0),
-                vae=utils.get_value_at_index(checkpoint, 2),
+                samples=get_value_at_index(sampled_image, 0),
+                vae=get_value_at_index(checkpoint, 2),
             )
 
             image_writer.save_images(
-                images=utils.get_value_at_index(decoded_image, 0))
-
-
-if __name__ == "__main__":
-    main()
+                images=get_value_at_index(decoded_image, 0))

@@ -7,7 +7,7 @@ class Dimensions(NamedTuple):
 
 
 class GenerationParameters:
-    def __init__(self, image: str = "scene.png", positive_prompt: str = "", negative_prompt: str = "", steps: int = 35, cfg: float = 7, sampler: str = "dpmpp_3m_sde_gpu", scheduler: str = "exponential", denoise: float = 1, dimensions: Dimensions = Dimensions(1024, 1024), iterations: int = 35):
+    def __init__(self, image: str = "scene.png", positive_prompt: str = "", negative_prompt: str = "", steps: int = 35, cfg: float = 7.0, sampler: str = "dpmpp_3m_sde_gpu", scheduler: str = "exponential", denoise: float = 1.0, dimensions: Dimensions = Dimensions(1024, 1024), iterations: int = 35):
         self.image = image
         self.positive_prompt = positive_prompt
         self.negative_prompt = negative_prompt
