@@ -46,7 +46,33 @@ pip install -r requirements.txt
 
 #### Part 2: ComfyUI
 
-...
+To actually generate the images, you'll need: ComfyUI, a pre-trained Stable Diffusion model, and a "Depth Control LoRA" model. Let's obtain these three things now...
+
+- Download the latest release of ComfyUI from their official GitHub repository [here](https://github.com/comfyanonymous/ComfyUI/releases/tag/latest).
+
+- Then, download any image-to-image `safetensors` model you desire - I've been using `sd_xl_base_1.0.safetensors` from StabilityAI on Hugging Face. It's available [here](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/blob/main/sd_xl_base_1.0.safetensors).
+
+- Once that download completes, move the `safetensors` file into the `ComfyUI/models/checkpoints` folder.
+
+- Next, clone the following repository into the `ComfyUI/models/controlnet` folder:
+
+```
+git clone https://huggingface.co/stabilityai/control-lora
+```
+
+There's only one more thing to do in the name of setup - we need to tell `a-eye-generator` where ComfyUI is located...
+
+### Pointing a-eye-generator to ComfyUI
+
+If you look at this repository's file structure, you should see a `.config` file - it contains the location where ComfyUI is installed to on your device. The default is `COMFY_DIRECTORY="D:\Comfy for Stable Diffusion\User Interface\ComfyUI"`, as this is where I have my installation stored. For this repository to work, you need to update this with your ComfyUI folder.
+
+To do this, navigate to the `ComfyUI` folder - please note, it's not the root folder with the `.bat` files; it's the `ComfyUI` folder within that directory that we need. See the below image highlighting this:
+
+![](https://raw.githubusercontent.com/A-Eye-Project-for-CSC1028/a-eye-generator/master/assets/comfyui-directory.png)
+
+Copy the file path of that folder, and paste it into the `.config` file.
+
+Once that's completed, you should be set to work with A-Eye! See [usage](#usage) for more details.
 
 ### Usage
 
