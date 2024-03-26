@@ -76,7 +76,11 @@ Once that's completed, you should be set to work with A-Eye! See [usage](#usage)
 
 ### Usage
 
-...
+When using an image-to-image model, we need a source image to base all of our generated output on. We need to 'upload' this/these image(s) to ComfyUI.
+
+To do this, navigate to `ComfyUI/input` and drop your image(s) there. You can call it/them whatever you like - just make sure to update the file name(s) in the generation script, too.
+
+Now you're ready to start generating your very own 3D-model-based AI art!
 
 **Contributing**
 
