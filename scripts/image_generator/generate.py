@@ -7,6 +7,10 @@ import torch
 from .generation_parameters import GenerationParameters
 from .utils import *
 
+"""
+A-Eye Image Generation Pipeline - Generates images based on a depth map and other parameters (see `GenerationParameters` class).
+"""
+
 
 def generate(parameters: GenerationParameters = GenerationParameters()):
     # Get config details, such as where ComfyUI is located at on the user's computer.

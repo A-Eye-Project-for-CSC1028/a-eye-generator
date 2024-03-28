@@ -10,6 +10,12 @@ INPUT_IMAGES_PATH = os.path.join(BASE_PATH, 'images', 'box_input')
 OUTPUT_IMAGES_PATH = os.path.join(BASE_PATH, 'images', 'box_output')
 
 
+"""
+Looks for any image files to be processed within a directory.
+Takes in a string - the path to search.
+"""
+
+
 def find_images_in_directory(path: str) -> list[str] | None:
     if os.path.exists(path):
         dir_list = os.listdir(path)
@@ -34,11 +40,18 @@ def find_images_in_directory(path: str) -> list[str] | None:
     print(f'Created "{path}" since it did not exist previously.')
 
 
+"""
+Pairs a list of images with their JSON data counterparts.
+Files must have the same name, but different extension.
+Ignore an image/JSON file if they do not have a 'partner.'
+"""
+
+
 def pair_images_with_json_data(image_paths: list[str]) -> list[tuple[str]]:
     pairs: list[tuple[str]] = []
 
     for image_file_name in image_paths:
-        json_file_name = image_file_name.split('.')[0] + ".json"
+        json_file_name = image_file_name.split('.')[0] + '.json'
 
         json_file_path = os.path.join(INPUT_IMAGES_PATH, json_file_name)
         image_file_path = os.path.join(INPUT_IMAGES_PATH, image_file_name)
@@ -48,6 +61,11 @@ def pair_images_with_json_data(image_paths: list[str]) -> list[tuple[str]]:
             pairs.append(pair)
 
     return pairs
+
+
+"""
+Calculate the top/bottom left & right-most points of the object in a given image based on the paired JSON file.
+"""
 
 
 def find_extreme_points(screen_space_data: dict) -> tuple[float]:
@@ -68,14 +86,19 @@ def find_extreme_points(screen_space_data: dict) -> tuple[float]:
     return (min_x, min_y, max_x, max_y)
 
 
+"""
+Draws red box around the object in all JSON/image pairs in images/box_input directory.
+"""
+
+
 def draw():
     # Find any images in the input directory - return their file names in a list if so.
     input_images = find_images_in_directory(INPUT_IMAGES_PATH)
 
     # ...otherwise, exit.
     if not input_images:
-        print(
-            f'There were no images found in "{INPUT_IMAGES_PATH}" - there must be some to carry on execution. Please place at least 1 image (PNG, JP(E)G, PPM, GIF, TIFF, or BMP) here to continue.')
+        print(f'''There were no images found in "{
+              INPUT_IMAGES_PATH}" - there must be some to carry on execution. Please place at least 1 image (PNG, JP(E)G, PPM, GIF, TIFF, or BMP) here to continue.''')
         exit(1)
 
     # Ensure output directory is present:
@@ -99,8 +122,8 @@ def draw():
 
             # If dimensions are mismatched, skip image.
             if image.size != expected_dimensions:
-                print(
-                    f'There are mismatched dimensions between "{files[0]}" and "{files[1]}" - skipping...')
+                print(f'''There are mismatched dimensions between "{
+                      files[0]}" and "{files[1]}" - skipping...''')
                 image.close()
                 continue
 
@@ -111,7 +134,7 @@ def draw():
 
             # Draw object recognition rectangle.
             draw = ImageDraw.Draw(image)
-            draw.rectangle(extreme_points, outline="red")
+            draw.rectangle(extreme_points, outline='red')
             del draw
 
             # Save to output directory!

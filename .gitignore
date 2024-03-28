@@ -151,6 +151,9 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-# Ignore everything in images barring, .gitkeep in the subfolders.
+# Ignore everything in images barring .gitkeep in the subfolders.
 images/*
-!images/.gitkeep
+!images/box_input
+!images/box_output
+images/*/*
+!images/*/.gitkeep

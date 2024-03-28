@@ -5,22 +5,37 @@ import sys
 from typing import Any, Mapping, Sequence, Union
 
 
+"""
+Get data from different 'indexed' data structures.
+"""
+
+
 def get_value_at_index(obj: Union[Sequence, Mapping], index: int) -> Any:
     try:
         return obj[index]
     except KeyError:
-        return obj["result"][index]
+        return obj['result'][index]
+
+
+"""
+Import 'nodes' module from the ComfyUI path for use in the generation script.
+"""
 
 
 def import_nodes_module(comfy_path: str) -> Any:
-    nodes_path = os.path.join(comfy_path, "nodes.py")
+    nodes_path = os.path.join(comfy_path, 'nodes.py')
 
     if os.path.exists(nodes_path):
         sys.path.append(comfy_path)
         import nodes
         return nodes
     else:
-        raise FileNotFoundError(f"nodes.py not found in '{comfy_path}'")
+        raise FileNotFoundError(f'nodes.py not found in "{comfy_path}"')
+
+
+"""
+Recursively find an import path based on its name and parent directory.
+"""
 
 
 def find_path(name: str, path: str = None) -> str:
@@ -31,7 +46,7 @@ def find_path(name: str, path: str = None) -> str:
     # Check if the current directory contains the name.
     if name in os.listdir(path):
         path_name = os.path.join(path, name)
-        print(f"{name} found: {path_name}")
+        print(f'{name} found: {path_name}')
         return path_name
 
     # Get the parent directory.
@@ -55,7 +70,7 @@ def parse_config() -> dict:
     config = {}
 
     # Obtain preset settings from config.txt file...
-    with open(".config", "r") as file:
+    with open('.config', 'r') as file:
         # ...line-by-line!
         for line in file:
             # Find anything between double quotes in line.
